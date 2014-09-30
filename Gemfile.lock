@@ -28,6 +28,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    bootstrap-sass (3.2.0.2)
+      sass (~> 3.2)
     builder (3.2.2)
     capybara (2.4.3)
       mime-types (>= 1.16)
@@ -50,7 +52,7 @@ GEM
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.2.1)
-    ffi (1.9.4-x86-mingw32)
+    ffi (1.9.5-x86-mingw32)
     formatador (0.2.5)
     guard (2.6.1)
       formatador (>= 0.2.4)
@@ -86,7 +88,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.0)
-    minitest (5.4.1)
+    minitest (5.4.2)
     multi_json (1.10.1)
     nokogiri (1.6.3.1-x86-mingw32)
       mini_portile (= 0.6.0)
@@ -190,7 +192,7 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2014.7)
+    tzinfo-data (1.2014.8)
       tzinfo (>= 1.0.0)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
@@ -207,6 +209,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  bootstrap-sass
   capybara
   childprocess
   coffee-rails (~> 4.0.0)
