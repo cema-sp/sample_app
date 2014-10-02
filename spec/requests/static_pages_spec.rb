@@ -1,49 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe "StaticPages", :type => :request do
-  let(:base_title) {"Ruby on Rails Tutorial Sample App"}
+  # let(:base_title) {"Ruby on Rails Tutorial Sample App"}
+  subject { page }
+
   describe "Home page" do
-    it "should have the content 'Sample App'" do
-      visit root_path
-      expect(page).to have_content('Sample App')
-    end
-    it "should have the default title" do
-      visit root_path
-      expect(page).to have_title("#{base_title}")
-    end
-    it "should not have a custom title" do
-      visit root_path
-      expect(page).not_to have_title("| Home")
-    end
+    before { visit root_path }
+    it { should have_content('Sample App') }
+    # it "should have the content 'Sample App'" do
+    #   expect(page).to have_content('Sample App')
+    # end
+    it { should have_title full_title }
+    # it "should have the default title" do
+    #   expect(page).to have_title("#{base_title}")
+    # end
+    it { should_not have_title full_title('Home') }
+    # it "should not have a custom title" do
+    #   expect(page).not_to have_title("| Home")
+    # end
   end
+
   describe "Help page" do
-    it "should have the content 'Help'" do
-      visit help_path
-      expect(page).to have_content('Help')
-    end
-    it "should have the right title" do
-      visit help_path
-      expect(page).to have_title("#{base_title} | Help")
-    end
+    before { visit help_path }
+    it { should have_content('Help') }
+    it { should have_title full_title('Help') }
   end
+
   describe "About page" do
-    it "should have the content 'About'" do
-      visit about_path
-      expect(page).to have_content('About')
-    end
-    it "should have the right title" do
-      visit about_path
-      expect(page).to have_title("#{base_title} | About")
-    end
+    before { visit about_path }
+    it {should have_content('About')}
+    it {should have_title full_title('About')}
   end
+
   describe "Contacts page" do
-    it "should have the content 'Contacts'" do
-      visit contacts_path
-      expect(page).to have_content('Contacts')
-    end
-    it "should have the right title" do
-      visit contacts_path
-      expect(page).to have_title("#{base_title} | Contacts")
-    end
+    before { visit contacts_path }
+    it {should have_content('Contacts')}
+    it {should have_title full_title('Contacts')}
   end
 end

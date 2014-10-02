@@ -36,7 +36,7 @@ guard :rspec, cmd: 'bundle exec rspec --drb', all_after_pass: false, all_on_star
   watch('spec/rails_helper.rb')                       { "spec" }
 
   # Capybara features specs
-  watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| ["spec/features/#{m[1]}_spec.rb","spec/requests/#{m[1]}_spec.rb"] }
+  watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| ["spec/features/#{m[1]}_spec.rb","spec/requests/#{m[1]}_spec.rb","spec/requests/#{m[1]}_pages_spec.rb"] }
 
   # Turnip features and steps
   watch(%r{^spec/acceptance/(.+)\.feature$})
