@@ -1,0 +1,10 @@
+{
+    "codeintel_config": {
+	    "Ruby": {
+	        "ruby": 'D:\Ruby200\bin\ruby.exe',
+	        "rubyExtraPaths": ['D:\Ruby200\lib\ruby\gems\2.0.0\gems', 'app', 'app/controllers'],
+	        "codeintel_scan_files_in_project": true,
+            "codeintel_max_recursive_dir_depth": 15
+	    }
+    }
+}
