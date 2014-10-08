@@ -56,6 +56,7 @@ group :test do
 	# gem 'win32console'
 	gem 'wdm'
 	gem 'rb-notifu'
+	gem 'factory_girl_rails', '4.2.1'
 end
 group :production do
 	gem 'pg'
