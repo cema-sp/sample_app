@@ -18,7 +18,49 @@ RSpec.describe "UserPages", :type => :request do
       end
     end
 
-    describe "sending filled form" do
+    describe "sending form with empty" do
+      before { click_button submit }
+      context "name" do
+        it { should have_selector('#error_explanation ul li',
+            text: "Name can't be blank") }
+      end
+      context "email" do
+        it { should have_selector('#error_explanation ul li',
+            text: "Email can't be blank") }
+      end
+      context "password" do
+        it { should have_selector('#error_explanation ul li',
+            text: "Password can't be blank") }
+      end
+    end
+    describe "sending form with wrond" do
+      context "email" do
+        before do
+          fill_in "Email", with: "a@b..com"
+          click_button submit
+        end
+        it { should have_selector('#error_explanation ul li',
+            text: "Email is invalid") }
+      end
+      context "name" do
+        before do
+          fill_in "Name", with: "a"*51
+          click_button submit
+        end
+        it { should have_selector('#error_explanation ul li',
+            text: "Name is too long") }
+      end
+      context "password" do
+        before do
+          fill_in "Password", with: "short"
+          click_button submit
+        end
+        it { should have_selector('#error_explanation ul li',
+            text: "Password is too short") }
+      end
+    end
+
+    describe "sending correctly filled form" do
       before do
         fill_in "Name", with: "Example User"
         fill_in "Email", with: "example@railstutorial.org"
@@ -30,6 +72,11 @@ RSpec.describe "UserPages", :type => :request do
         expect { click_button submit }.
           to change(User, :count).by(1)
       end
+      describe "click submit" do
+        before { click_button submit }
+        it { should have_selector('h1', text: "Example User") }
+        it { should have_selector('.alert', text: "Welcome to the Sample App, Example User!") }
+      end 
     end
   end
   describe "profile page" do
