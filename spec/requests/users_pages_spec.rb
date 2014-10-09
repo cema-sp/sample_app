@@ -74,7 +74,10 @@ RSpec.describe "UserPages", :type => :request do
       end
       describe "click submit" do
         before { click_button submit }
-        it { should have_selector('h1', text: "Example User") }
+        let(:user) { User.find_by(email: "example@railstutorial.org") }
+        
+        it { should have_link('Sign out') }
+        it { should have_selector('h1', text: user.name) }
         it { should have_selector('.alert.alert-success', text: "Welcome to the Sample App, Example User!") }
       end 
     end
