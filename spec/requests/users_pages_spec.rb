@@ -75,7 +75,7 @@ RSpec.describe "UserPages", :type => :request do
       describe "click submit" do
         before { click_button submit }
         it { should have_selector('h1', text: "Example User") }
-        it { should have_selector('.alert', text: "Welcome to the Sample App, Example User!") }
+        it { should have_selector('.alert.alert-success', text: "Welcome to the Sample App, Example User!") }
       end 
     end
   end
