@@ -54,6 +54,8 @@ end
 group :test do
 	gem 'selenium-webdriver'
 	gem 'capybara'
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
 	# gem 'win32console'
 	gem 'wdm'
 	gem 'rb-notifu'
