@@ -27,8 +27,9 @@
         class: "btn btn-large btn-primary" %>
 
     <% end %>
-    <% if defined?(:is_edit_form) %>
+    <% if defined?(is_edit_form) -%>
+      <%= gravatar_for @user %>
       <a href="http://gravatar.com/emails">change</a>
-    <% end %>
+    <% end -%>
   </div>
 </div>
