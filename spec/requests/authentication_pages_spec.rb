@@ -17,7 +17,7 @@ RSpec.describe "AuthenticationPages", :type => :request do
       before { click_button submit }
 
       it { should have_content("Sign In") }
-      it { should have_selector('.alert.alert-danger', text: "blank") }
+      it { should have_error_message "blank" }
     end
 
     describe "with wrong credentials" do
@@ -28,21 +28,19 @@ RSpec.describe "AuthenticationPages", :type => :request do
       end
 
       it { should have_content("Sign In") }
-      it { should have_selector('.alert.alert-danger', text: "Invalid") }
+      it { should have_error_message "Invalid" }
     
       describe "after visiting another page" do
         before { click_link "Home" }
 
-        it { should_not have_selector('.alert.alert-danger', text: "Invalid") }
+        it { should_not have_error_message "Invalid" }
       end
     end
 
     describe "with right credentials" do
       let(:user) { FactoryGirl.create(:user) }
       before do
-        fill_in "Email", with: user.email.upcase
-        fill_in "Password", with: user.password
-        click_button submit
+        valid_signin(user)
       end
 
       it { should have_title(user.name) }
