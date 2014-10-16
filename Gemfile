@@ -44,6 +44,9 @@ gem 'bcrypt', '~> 3.1.7'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 
+# Gem for data randomization
+gem 'faker'
+
 group :development, :test do
 	# Use sqlite3 as the database for Active Record
 	gem 'sqlite3'
@@ -53,8 +56,6 @@ group :development, :test do
 	gem 'spork-rails'
 	gem 'guard-spork'
 	gem 'childprocess'
-  # Gem for data randomization
-  gem 'faker'
 end
 group :test do
 	gem 'selenium-webdriver'
