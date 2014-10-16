@@ -55,6 +55,8 @@ RSpec.describe "AuthenticationPages", :type => :request do
         before { click_link "Sign out" }
         it { should have_link('Sign in') }
         it { should_not have_link('Sign out') }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
       end
     end
   end
@@ -70,6 +72,10 @@ RSpec.describe "AuthenticationPages", :type => :request do
         end
         describe "submitting to the update action" do
           before { patch user_path(user) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+        describe "submitting to the destroy action" do
+          before { delete user_path(user) }
           specify { expect(response).to redirect_to(signin_path) }
         end
         describe "visiting the users index" do
@@ -89,6 +95,16 @@ RSpec.describe "AuthenticationPages", :type => :request do
           it "should render the desired protected page" do
             expect(page).to have_title('Edit user')
           end
+        end
+        describe "then signout and signin" do
+          before do
+            click_link "Sign out"
+            visit signin_path
+            fill_in "Email", with: user.email
+            fill_in "Password", with: user.password
+            click_button "Sign in"
+          end
+          it { should have_title(user.name) }
         end
       end
     end
@@ -113,6 +129,11 @@ RSpec.describe "AuthenticationPages", :type => :request do
         before { patch user_path(wrong_user), user: {email: "test@example.com"} }
         specify { expect(response).to redirect_to(root_url) }
       end
+
+      describe "submitting a DELETE request to the Users#destroy action" do
+        before { delete user_path(user) }
+        specify { expect(response).to redirect_to(root_url) }
+      end
     end
     describe "as non-admin user" do
       let(:user) { FactoryGirl.create(:user) }
@@ -125,10 +146,46 @@ RSpec.describe "AuthenticationPages", :type => :request do
 
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
-
         specify { expect(response).to redirect_to(root_url) }
       end
 
+      describe "submitting an UPDATE request with Users#admin attribute" do
+        before { patch user_path(non_admin), 
+          { user: FactoryGirl.attributes_for(:user, admin: true) } }
+
+        specify { expect(response).to redirect_to(non_admin) }
+        specify { expect(non_admin.reload).not_to be_admin }
+      end
+
+      describe "submitting a GET request to the Users#new action" do
+        before { get new_user_path }
+        specify { expect(response).to redirect_to(root_url) }
+      end
+      describe "submitting a POST request to the Users#create action" do
+        before { post users_path, 
+          {user: FactoryGirl.attributes_for(:user, email: "new@example.com")} }
+        specify { expect(response).to redirect_to(root_url) }
+      end
     end
+    describe "as an admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before do
+        visit signin_path
+        valid_signin admin, no_capybara: true
+      end
+      describe "submitting a DELETE request to the Users#destroy action on self" do
+        specify { expect{ delete user_path(admin) }.
+          not_to change(User, :count) }
+        describe "and" do
+          before do
+            delete user_path(admin)
+
+          end
+          specify { expect(response).to redirect_to(users_path) } 
+          specify { expect(flash[:danger]).to eq "Admin cannot delete self" }
+        end
+      end
+    end
+
   end
 end

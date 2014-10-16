@@ -105,6 +105,7 @@ RSpec.describe "UserPages", :type => :request do
       it { should have_title("Edit user") }
       it { should have_link('change', 
         href: 'http://gravatar.com/emails') }
+      it { should have_selector('a[href="http://gravatar.com/emails"][target="_blank"]') }
     end
 
     describe "with invalid information" do
