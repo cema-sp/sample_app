@@ -45,7 +45,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 
 # Gem for data randomization
-gem 'faker'
+gem 'faker', require: false
 
 group :development, :test do
 	# Use sqlite3 as the database for Active Record
