@@ -8,6 +8,9 @@ gem 'rails', '4.1.5'
 gem 'sass-rails', '~> 4.0.3'
 # Bootstrap for rails
 gem 'bootstrap-sass'
+# Pagination gem
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 # Autoprefixer for rails
 # gem 'autoprefixer-rails'
 # Use Uglifier as compressor for JavaScript assets
