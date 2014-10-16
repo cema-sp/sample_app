@@ -35,8 +35,6 @@ gem 'bcrypt', '~> 3.1.7'
 # Use unicorn as the app server
 # gem 'unicorn'
 
-# Gem for data randomization
-gem 'faker'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -55,6 +53,8 @@ group :development, :test do
 	gem 'spork-rails'
 	gem 'guard-spork'
 	gem 'childprocess'
+  # Gem for data randomization
+  gem 'faker'
 end
 group :test do
 	gem 'selenium-webdriver'
