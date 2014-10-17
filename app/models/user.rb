@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
 	# VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	VALID_EMAIL_REGEX = /\A([\w+]|\b[\-.]{1})+\b@\b([a-z\d]|\b[\-.]{1})+\b[\.]{1}[a-z]+\z/i
 
@@ -15,6 +16,9 @@ class User < ActiveRecord::Base
   end
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 
 	has_secure_password

@@ -39,21 +39,25 @@ RSpec.describe "StaticPages", :type => :request do
     let(:page_title) { '' }
 
     it_should_behave_like "all static pages"
-    # it { should have_selector('h1', text: 'Sample App') }
-
-    # it "should have the content 'Sample App'" do
-    #   expect(page).to have_content('Sample App')
-    # end
-
-    # it { should have_title full_title }
-
-    # it "should have the default title" do
-    #   expect(page).to have_title("#{base_title}")
-    # end
     it { should_not have_title full_title('Home') }
-    # it "should not have a custom title" do
-    #   expect(page).not_to have_title("| Home")
-    # end
+
+    describe "for signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "aaa")
+        FactoryGirl.create(:micropost, user: user, content: "aaa")
+        visit signin_path
+        valid_signin user
+        visit root_path
+      end
+
+      it "should render the user's feed" do
+        user.feed.each do |item|
+          expect(page).to have_selector("li##{item.id}", 
+            text: item.content)
+        end
+      end
+    end
   end
 
   describe "Help page" do
