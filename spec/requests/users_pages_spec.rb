@@ -85,6 +85,7 @@ RSpec.describe "UserPages", :type => :request do
   describe "profile page" do
     # make a user
     let(:user) { FactoryGirl.create(:user) }
+    let(:other_user) { FactoryGirl.create(:user) }
     # and microposts
     let!(:m1) { FactoryGirl.create(:micropost, 
       user: user, content: "Hello") }
@@ -95,10 +96,51 @@ RSpec.describe "UserPages", :type => :request do
     
     it { should have_title(user.name) }
     it { should have_content(user.name) }
+
     describe "microposts" do
       it { should have_content(m1.content) }
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
+
+      describe "pagination" do
+        before(:all) do
+          @user = FactoryGirl.create(:user)
+          50.times { |n| FactoryGirl.create(:micropost, 
+            user: @user, content: "MSG #{n}") }
+        end
+        before { visit user_path(@user) }
+        after(:all) { @user.destroy }
+        # specify { expect(@user.microposts.count).to eq(50) }
+        # it { should have_content @user.name }
+        # it { should have_selector('.microposts') }
+        it { should have_selector('.microposts li', count: 20) }
+        it { should have_selector('.pagination') }
+        it "should list first 20 messages" do
+          @user.microposts.paginate(page: 1, per_page: 20).each do |mp|
+            expect(page).to have_selector('.microposts li',text: mp.content)
+          end
+        end
+      end
+
+      describe "delete links" do
+        before do
+          visit signin_path
+          valid_signin user
+        end
+        it { should have_selector('.microposts li a', 
+          count: user.microposts.count, 
+          text: 'delete') }
+        
+        describe "for other user" do
+          before do 
+            FactoryGirl.create(:micropost, user: other_user)
+            visit user_path(other_user) 
+          end
+          it { should have_selector('.microposts') }
+          it { should_not have_selector('.microposts li a', 
+            text: 'delete') }
+        end
+      end
     end
   end
   describe "edit user" do

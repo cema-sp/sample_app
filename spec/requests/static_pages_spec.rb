@@ -45,7 +45,7 @@ RSpec.describe "StaticPages", :type => :request do
       let(:user) { FactoryGirl.create(:user) }
       before do
         FactoryGirl.create(:micropost, user: user, content: "aaa")
-        FactoryGirl.create(:micropost, user: user, content: "aaa")
+        FactoryGirl.create(:micropost, user: user, content: "bbb")
         visit signin_path
         valid_signin user
         visit root_path
@@ -56,6 +56,29 @@ RSpec.describe "StaticPages", :type => :request do
           expect(page).to have_selector("li##{item.id}", 
             text: item.content)
         end
+      end
+
+      describe "sidebar" do
+        let(:microposts_count) do
+          user.microposts.count.to_s+" "+
+            'micropost'.pluralize(user.microposts.count)
+        end
+        it { should have_selector('section h1', text: user.name) }
+        it { should have_selector('span', text: microposts_count) }
+        
+        describe "JS letters counter" do
+          it { should have_selector('#letters_counter', 
+            text: '140 letters left') }
+          # NEED FIREFOX TO WORK
+          # describe "when typing", js: true do
+          #   before { fill_in "micropost_content", 
+          #    with: "123" }
+          #   it { should have_selector('#letters_counter', 
+          #   text: '137 letters left') }
+          #   specify { expect(page).to have_content('137') }
+          # end
+        end
+
       end
     end
   end

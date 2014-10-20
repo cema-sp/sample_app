@@ -5,6 +5,7 @@ RSpec.describe "MicropostPages", :type => :request do
 
   let(:user) { FactoryGirl.create(:user) }
   before do
+    user.microposts.create(content: 'test')
     visit signin_path
     valid_signin user
   end
@@ -18,7 +19,9 @@ RSpec.describe "MicropostPages", :type => :request do
       end
       describe "error messages" do
         before { click_button "Post" }
+        specify { expect(user.microposts.count).to eq(1) }
         it { should have_error_message 'error' }
+        it { should have_selector('.microposts') }
       end
     end
 
@@ -27,6 +30,17 @@ RSpec.describe "MicropostPages", :type => :request do
       it "should create a micropost" do
         expect { click_button "Post" }.
           to change(Micropost, :count).by(1)
+      end
+    end
+  end
+
+  describe "micropost destruction" do
+    before { FactoryGirl.create(:micropost, user: user) }
+    describe "as correct user" do
+      before { visit root_path }
+      it "should delete a micropost" do
+        expect { first('.microposts li').click_link "delete" }.
+          to change(Micropost, :count).by(-1)
       end
     end
   end

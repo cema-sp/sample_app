@@ -61,6 +61,7 @@ end
 group :test do
 	gem 'selenium-webdriver'
 	gem 'capybara'
+  # gem 'capybara-webkit'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
 	# gem 'win32console'

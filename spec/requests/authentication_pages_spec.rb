@@ -122,6 +122,8 @@ RSpec.describe "AuthenticationPages", :type => :request do
       let(:user) { FactoryGirl.create(:user) }
       let(:wrong_user) { FactoryGirl.create(:user, 
         email: "another@example.com") }
+      let(:wrong_users_mp) { FactoryGirl.create(:micropost, 
+        user: wrong_user) }
       before do 
         get signin_path
         valid_signin user, no_capybara: true 
@@ -143,6 +145,15 @@ RSpec.describe "AuthenticationPages", :type => :request do
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
         specify { expect(response).to redirect_to(root_url) }
+      end
+
+      describe "submitting a DELETE request to the Microposts#destroy action" do
+        before { delete micropost_path(wrong_users_mp) }
+        specify { expect(response).to redirect_to(root_url) }
+        it "should not delete others micropost" do
+          expect { delete micropost_path(wrong_users_mp) }.
+            not_to change(Micropost, :count)
+        end
       end
     end
     describe "as non-admin user" do
