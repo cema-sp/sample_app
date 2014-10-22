@@ -78,7 +78,17 @@ RSpec.describe "StaticPages", :type => :request do
           #   specify { expect(page).to have_content('137') }
           # end
         end
+      end
 
+      describe "follower/following counts" do
+        let(:other_user) { FactoryGirl.create(:user) }
+        before do
+          other_user.follow!(user)
+          visit root_path
+        end
+
+        it { should have_link("0 following", href: following_user_path(user)) }
+        it { should have_link("1 followers", href: followers_user_path(user)) }
       end
     end
   end
