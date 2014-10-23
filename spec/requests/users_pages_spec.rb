@@ -142,6 +142,50 @@ RSpec.describe "UserPages", :type => :request do
         end
       end
     end
+
+    describe "follow/unfollow buttons" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      before do
+        visit signin_path
+        valid_signin user
+      end
+
+      describe "following a user" do
+        before { visit user_path(other_user) }
+        it "should increment the followed user count" do
+          expect { click_button "Follow" }.
+            to change(user.followed_users,:count).by(1)
+        end
+        it "should increment the other user's followers count" do
+          expect { click_button "Follow" }.
+            to change(other_user.followers,:count).by(1)
+        end
+        describe "toggling the button" do
+          before { click_button "Follow" }
+          it { should have_xpath("//input[@value='Unfollow']") }
+        end
+      end
+
+      describe "unfollowing a user" do
+        before do
+          visit user_path(other_user)
+          click_button "Follow"
+        end 
+        it "should decrement the followed user count" do
+          expect { click_button "Unfollow" }.
+            to change(user.followed_users,:count).by(-1)
+        end
+        it "should decrement the other user's followers count" do
+          expect { click_button "Unfollow" }.
+            to change(other_user.followers,:count).by(-1)
+        end
+        describe "toggling the button" do
+          before { click_button "Unfollow" }
+          it { should have_xpath("//input[@value='Follow']") }
+        end
+      end
+
+    end
   end
   describe "edit user" do
     let(:user) { FactoryGirl.create(:user) }
