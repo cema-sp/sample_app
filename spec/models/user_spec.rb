@@ -186,5 +186,23 @@ RSpec.describe User, :type => :model do
       subject { other_user }
       its(:followers) { should include(@user) }
     end
+
+    it "should destroy associated relationships (and reverse)" do
+      other_user.follow!(@user)
+      
+      relationships = @user.relationships.to_a
+      reverse_relationships = @user.reverse_relationships.to_a
+      @user.destroy
+      expect(relationships).not_to be_empty
+      expect(reverse_relationships).not_to be_empty
+      relationships.each do |relationship|
+        expect {Relationship.find(relationship)}.
+          to raise_error(ActiveRecord::RecordNotFound)
+      end
+      reverse_relationships.each do |reverse_relationship|
+        expect {Relationship.find(reverse_relationship)}.
+          to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 end
